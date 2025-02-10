@@ -758,6 +758,32 @@ local function SkinDropDownMenu(libName)
 	return true
 end
 
+local LQT = LibStub("LibQTip-1.0", true)
+if LQT then
+	S:SecureHook(LQT, 'Acquire', function()
+		for _, tooltip in LQT:IterateTooltips() do
+			if not tooltip.isSkinned then
+				tooltip:StripTextures(true)
+				tooltip:CreateBackdrop("Transparent")
+				-- tooltip.isSkinned = true
+			end
+		end
+	end)
+end
+
+local LQTRS = LibStub("LibQTip-1.0RS", true)
+if LQTRS then
+	S:SecureHook(LQTRS, 'Acquire', function()
+		for _, tooltip in LQTRS:IterateTooltips() do
+			if not tooltip.isSkinned then
+				tooltip:StripTextures(true)
+				tooltip:CreateBackdrop("Transparent")
+				-- tooltip.isSkinned = true
+			end
+		end
+	end)
+end
+
 local function SkinLibQTip(lib)
 	hooksecurefunc(lib, "Acquire", function(self, key)
 		if self.activeTooltips[key] then

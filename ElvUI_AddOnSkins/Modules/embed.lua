@@ -1,9 +1,11 @@
 local E, L, V, P, G = unpack(ElvUI)
 local EMB = E:NewModule("EmbedSystem")
 local AS = E:GetModule("AddOnSkins")
+local CH = E:GetModule("Chat")
 
 local _G = _G
 local pairs = pairs
+local ipairs = ipairs
 local floor = math.floor
 local lower, match = string.lower, string.match
 local tinsert = table.insert
@@ -101,18 +103,22 @@ function EMB:SetHooks()
 	end)
 	hooksecurefunc(E:GetModule("Layout"), "ToggleChatPanels", function() EMB:EmbedUpdate() end)
 
-	hooksecurefunc(LeftChatPanel, "fadeFunc", function()
+	-- hooksecurefunc(LeftChatPanel, function()
+	if E.db.LeftChatPanelFaded then
 		LeftChatPanel:Hide()
 		if not E.db.addOnSkins.embed.rightChatPanel then
 			EMB.switchButton:Hide()
 		end
-	end)
-	hooksecurefunc(RightChatPanel, "fadeFunc", function()
+	end
+	-- end)
+	-- hooksecurefunc(RightChatPanel, function()
+	if E.db.RightChatPanelFaded then
 		RightChatPanel:Hide()
 		if E.db.addOnSkins.embed.rightChatPanel then
 			EMB.switchButton:Hide()
 		end
-	end)
+	end
+	-- end)
 
 	local rightChatToggleOnClickOriginal = RightChatToggleButton:GetScript("OnClick")
 	RightChatToggleButton:RegisterForClicks("AnyDown")
@@ -219,10 +225,10 @@ function EMB:UpdateSwitchButton()
 		self.switchButton.text:SetText(isDouble and db.leftWindow.." / "..db.rightWindow or db.leftWindow)
 		self.switchButton:ClearAllPoints()
 
-		if E.Chat.RightChatWindowID and _G["ChatFrame"..E.Chat.RightChatWindowID.."Tab"]:IsVisible() then
-			self.switchButton:Point("LEFT", _G["ChatFrame"..E.Chat.RightChatWindowID.."Tab"], "RIGHT", 0, 0)
+		if E.Chat.RightChatWindow and _G["ChatFrame"..E.Chat.RightChatWindow:GetID().."Tab"]:IsVisible() then
+			self.switchButton:Point("LEFT", _G["ChatFrame"..E.Chat.RightChatWindow:GetID().."Tab"], "RIGHT", 0, 6)
 		else
-			self.switchButton:Point(db.rightChatPanel and "LEFT" or "RIGHT", chatTab, 5, 4)
+			self.switchButton:Point(db.rightChatPanel and "LEFT" or "RIGHT", chatTab, 0, 6)
 		end
 	elseif self.switchButton:IsShown() then
 		self.switchButton:Hide()
@@ -243,7 +249,7 @@ function EMB:EmbedCreate()
 	self.switchButton.text = self.switchButton:CreateFontString(nil, "OVERLAY")
 	self.switchButton.text:FontTemplate(E.LSM:Fetch("font", E.db.chat.tabFont), E.db.chat.tabFontSize, E.db.chat.tabFontOutline)
 	self.switchButton.text:SetTextColor(unpack(E["media"].rgbvaluecolor))
-	self.switchButton.text:SetPoint("LEFT", 16, -5)
+	self.switchButton.text:SetPoint("LEFT", 16, -6)
 
 	self.switchButton:SetScript("OnClick", function(self, button)
 		if EMB.mainFrame:IsShown() then
@@ -256,8 +262,8 @@ function EMB:EmbedCreate()
 		EMB:UpdateSwitchButton()
 	end)
 
-	self.switchButton:SetScript("OnMouseDown", function(self) self.text:Point("LEFT", 18, -7) end)
-	self.switchButton:SetScript("OnMouseUp", function(self) self.text:Point("LEFT", 16, -5) end)
+	self.switchButton:SetScript("OnMouseDown", function(self) self.text:Point("LEFT", 18, -8) end)
+	self.switchButton:SetScript("OnMouseUp", function(self) self.text:Point("LEFT", 16, -6) end)
 
 	self.mainFrame:SetScript("OnShow", function() EMB:EmbedShow() end)
 	self.mainFrame:SetScript("OnHide", function() EMB:EmbedHide() end)
@@ -403,7 +409,7 @@ if AS:IsAddonLODorEnabled("Skada") then
 		end
 
 		local point
-		if numberToEmbed == 1 then
+		if self.skadaWindows[1] and numberToEmbed == 1 then
 			local parent = self.leftFrame
 			if db.embedType == "DOUBLE" then
 				parent = db.rightWindow == "Skada" and self.rightFrame or self.leftFrame
@@ -411,12 +417,12 @@ if AS:IsAddonLODorEnabled("Skada") then
 
 			point = self.skadaWindows[1].db.reversegrowth and "BOTTOMLEFT" or "TOPLEFT"
 			EmbedWindow(self.skadaWindows[1], parent:GetWidth() -(E.Border*2), parent:GetHeight(), point, parent, point, E.Border, E.Border)
-		elseif numberToEmbed == 2 then
+		elseif self.skadaWindows[1] and numberToEmbed == 2 then
 			point = self.skadaWindows[1].db.reversegrowth and "BOTTOMLEFT" or "TOPLEFT"
 			EmbedWindow(self.skadaWindows[1], self.leftFrame:GetWidth() -(E.Border*2), self.leftFrame:GetHeight(), point, self.leftFrame, point, E.Border, E.Border)
 
 			if not self.skadaWindows[2] then
-				E:Print("Please Create Skada Windows 2")
+				-- E:Print(L["Please create a second Skada window."])
 				return
 			end
 
