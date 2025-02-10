@@ -34,10 +34,16 @@ S:AddCallbackForAddon("FloAspectBar", "FloAspectBar", function()
 	end
 
 	FloAspectBar:SetClampedToScreen(true)
+	FloAspectBar:SetHeight(40)
 
 	FloLib_ShowBorders(FloAspectBar)
 
 	for i = 1, 10 do
 		AB:StyleButton(_G["FloAspectBarButton" .. i])
+		if  i > 1 then
+			_G["FloAspectBarButton" .. i]:Point("LEFT", _G["FloAspectBarButton" .. i-1],"RIGHT", 2, 0)
+		else
+			_G["FloAspectBarButton" .. i]:Point("LEFT", 5, 0)
+		end
 	end
 end)

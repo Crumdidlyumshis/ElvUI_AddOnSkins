@@ -19,7 +19,7 @@ S:AddCallbackForAddon("FloTotemBar", "FloTotemBar", function()
 
 	if not S:IsHooked("FloLib_ShowBorders") then
 		S:RawHook("FloLib_ShowBorders", function(self)
-			if self.globalSettings.borders then
+			if self.globalSettings and self.globalSettings.borders then
 				if not self.template then
 					self:SetTemplate("Transparent")
 				end
@@ -54,6 +54,7 @@ S:AddCallbackForAddon("FloTotemBar", "FloTotemBar", function()
 		for i = 1, 10 do
 			local button = _G[frameName.."Button"..i]
 			AB:StyleButton(button)
+			S:HandlePointXY(button, 2, 0)
 
 			if frameName ~= "FloBarTRAP" and frameName ~= "FloBarCALL" then
 				FloSwitchButton_OnLeave(button)
