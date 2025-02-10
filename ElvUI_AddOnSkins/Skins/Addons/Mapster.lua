@@ -128,13 +128,15 @@ S:AddCallbackForAddon("Mapster", "Mapster", function()
 		end
 	end)
 
-	MapsterOptionsButton:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -50, -3)
-	MapsterOptionsButton.SetPoint = E.noop
+	E:Delay(0.5, function()
+		MapsterOptionsButton:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -50, -3)
+		MapsterOptionsButton.SetPoint = E.noop
 
-	MapsterQuestObjectivesDropDown:Point("BOTTOMRIGHT", WorldMapPositioningGuide, "BOTTOMRIGHT", -7, -4)
+		MapsterQuestObjectivesDropDown:Point("BOTTOMRIGHT", WorldMapPositioningGuide, "BOTTOMRIGHT", -7, -4)
 
-	S:HandleButton(MapsterOptionsButton)
-	S:HandleDropDownBox(MapsterQuestObjectivesDropDown)
+		S:HandleButton(MapsterOptionsButton)
+		S:HandleDropDownBox(MapsterQuestObjectivesDropDown)
+	end)
 
 	do -- Scaler
 		local Scale = Mapster:GetModule("Scale", true)
