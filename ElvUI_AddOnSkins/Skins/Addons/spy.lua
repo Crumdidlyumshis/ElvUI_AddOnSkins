@@ -11,6 +11,7 @@ local _G = _G
 
 S:AddCallbackForAddon("Spy", "Spy", function()
 	if not E.private.addOnSkins.Spy then return end
+	local isInverted = Spy.db.profile.InvertSpy
 
 	Spy_AlertWindow:StripTextures()
 	Spy_AlertWindow:SetTemplate("Transparent")
@@ -29,11 +30,11 @@ S:AddCallbackForAddon("Spy", "Spy", function()
 
 	S:HandleCloseButton(Spy_MainWindow.CloseButton)
 	Spy_MainWindow.CloseButton:Size(32)
-	Spy_MainWindow.CloseButton:Point("TOPRIGHT", 3, -6)
+	Spy_MainWindow.CloseButton:Point(isInverted and "BOTTOMRIGHT" or "TOPRIGHT", 3, isInverted and -26 or -6)
 
 	S:HandleNextPrevButton(Spy_MainWindow.RightButton, "right", nil, true)
 	Spy_MainWindow.RightButton:Size(20)
-	Spy_MainWindow.RightButton:Point("TOPRIGHT", -22, -12)
+	Spy_MainWindow.RightButton:Point(isInverted and "BOTTOMRIGHT" or "TOPRIGHT", -22, isInverted and -20 or -12)
 
 	S:HandleNextPrevButton(Spy_MainWindow.LeftButton, "left", nil, true)
 	Spy_MainWindow.LeftButton:Size(20)
@@ -47,8 +48,13 @@ S:AddCallbackForAddon("Spy", "Spy", function()
 	Spy_MainWindow.ClearButton:HookScript("OnEnter", function(self) self:GetNormalTexture():SetVertexColor(unpack(E.media.rgbvaluecolor)) end)
 	Spy_MainWindow.ClearButton:HookScript("OnLeave", function(self) self:GetNormalTexture():SetVertexColor(1, 1, 1) end)
 
-	Spy_MainWindow.DragBottomLeft:SetNormalTexture(nil)
-	Spy_MainWindow.DragBottomRight:SetNormalTexture(nil)
+	if not Spy.db.profile.InvertSpy then
+		Spy_MainWindow.DragBottomLeft:SetNormalTexture(nil)
+		Spy_MainWindow.DragBottomRight:SetNormalTexture(nil)
+	else
+		Spy_MainWindow.DragTopLeft:SetNormalTexture(nil)
+		Spy_MainWindow.DragTopRight:SetNormalTexture(nil)
+	end
 
 	local function SkinBar(bar, i)
 		if bar.isSkinned then return end
