@@ -52,11 +52,11 @@ S:AddCallbackForAddon("LootWonAlert", "LootWonAlert", function()
 			if quality then
 				local r, g, b = GetItemQualityColor(quality)
 				self:SetBackdropBorderColor(r, g, b)
-				-- self.backdrop:SetBackdropBorderColor(r, g, b)
+				self.backdrop:SetBackdropBorderColor(r, g, b)
 				self.lootItem.Icon.backdrop:SetBackdropBorderColor(r, g, b)
 			else
 				self:SetBackdropBorderColor(unpack(E.media.bordercolor))
-				-- self.backdrop:SetBackdropBorderColor(r, g, b)
+				self.backdrop:SetBackdropBorderColor(r, g, b)
 				self.lootItem.Icon.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
 		end
