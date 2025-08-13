@@ -54,7 +54,7 @@ S:AddCallbackForAddon("FloTotemBar", "FloTotemBar", function()
 		for i = 1, 10 do
 			local button = _G[frameName.."Button"..i]
 			AB:StyleButton(button)
-			S:HandlePointXY(button, 2, 0)
+			button:PointXY(2, 0)
 
 			if frameName ~= "FloBarTRAP" and frameName ~= "FloBarCALL" then
 				FloSwitchButton_OnLeave(button)
